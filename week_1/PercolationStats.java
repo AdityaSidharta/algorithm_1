@@ -31,6 +31,9 @@ public class PercolationStats {
     }
 
     public PercolationStats(int n, int trials) {
+        if (n <= 0) {
+            throw new IllegalArgumentException("n cannot be negative");
+        }
         this.n = n;
         this.trials = trials;
         results = new double[trials];
@@ -47,7 +50,6 @@ public class PercolationStats {
 
     public double mean() {
         this.mean = StdStats.mean(results);
-        System.out.println(StdStats.mean(results));
         return this.mean;
     }
 
@@ -57,22 +59,12 @@ public class PercolationStats {
     }
 
     public double confidenceLo() {
-        this.confidencelo = this.mean - (1.96 * Math.sqrt(this.stddev) / Math.sqrt(this.trials));
+        this.confidencelo = this.mean - 1.96 * this.stddev / Math.sqrt(this.trials);
         return this.confidencelo;
     }
 
     public double confidenceHi() {
-        this.confidencehi = this.mean + (1.96 * Math.sqrt(this.stddev) / Math.sqrt(this.trials));
+        this.confidencehi = this.mean + 1.96 * this.stddev / Math.sqrt(this.trials);
         return this.confidencehi;
-    }
-
-    public static void main(String[] args) {
-        int n = Integer.parseInt(args[0]);
-        int T = Integer.parseInt(args[1]);
-        PercolationStats perc_stats = new PercolationStats(n, T);
-        System.out.println("mean " + perc_stats.mean);
-        System.out.println("stddev " + perc_stats.stddev);
-        System.out.println("confidenceLo " + perc_stats.confidencelo);
-        System.out.println("confidenceHi " + perc_stats.confidencehi);
     }
 }

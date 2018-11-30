@@ -52,11 +52,11 @@ public class Percolation {
         }
     }
 
-    public int grid2map(int x, int y) {
+    private int grid2map(int x, int y) {
         return map[x][y];
     }
 
-    public int[] map2grid(int idx) {
+    private int[] map2grid(int idx) {
         int x, y;
         int[] value = new int[2];
         for (x = 0; x < n; x++) {
@@ -80,6 +80,9 @@ public class Percolation {
 
     public Percolation(int n) {
         this.n = n;
+        if (n <= 0) {
+            throw new IllegalArgumentException("n cannot be negative");
+        }
         init_n_sites(n);
         init_map(n);
         init_grid(n);
@@ -131,12 +134,15 @@ public class Percolation {
     }
 
     public boolean isFull(int row, int col) {
-        int x, y, idx;
-        is_legal(row, col);
-        x = row - 1;
-        y = col - 1;
-        idx = grid2map(x, y);
-        return union.connected(start_idx, idx);
+        if (!isOpen(row, col)) return false;
+        else {
+            int x, y, idx;
+            is_legal(row, col);
+            x = row - 1;
+            y = col - 1;
+            idx = grid2map(x, y);
+            return union.connected(start_idx, idx);
+        }
     }
 
     public int numberOfOpenSites() {
@@ -145,10 +151,5 @@ public class Percolation {
 
     public boolean percolates() {
         return union.connected(start_idx, end_idx);
-    }
-
-    public static void main(String[] args) {
-        int n = Integer.parseInt(args[0]);
-        Percolation percolation = new Percolation(n);
     }
 }
