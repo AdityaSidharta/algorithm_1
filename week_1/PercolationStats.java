@@ -67,4 +67,8 @@ public class PercolationStats {
         this.confidencehi = this.mean + 1.96 * this.stddev / Math.sqrt(this.trials);
         return this.confidencehi;
     }
+
+    public static void main(String[] args) {
+        return;
+    }
 }

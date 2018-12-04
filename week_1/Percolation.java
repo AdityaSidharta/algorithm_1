@@ -152,4 +152,8 @@ public class Percolation {
     public boolean percolates() {
         return union.connected(start_idx, end_idx);
     }
+
+    public static void main(String[] args) {
+        return;
+    }
 }
