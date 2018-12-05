@@ -1,7 +1,4 @@
 import java.util.Iterator;
-import java.util.NoSuchElementException;
-import java.lang.Object;
-import java.lang.IllegalArgumentException;
 
 public class Deque<Item> implements Iterable<Item> {
     private Item[] s;
@@ -59,7 +56,6 @@ public class Deque<Item> implements Iterable<Item> {
     private void upsize_array() {
         // TODO : resize should reset pointer
         n_array = n_array * 2;
-        last_index = n_array - 1;
         Item[] copy = (Item[]) new Object[n_array];
         for (int i = 0; i < n_item; i = i + 1) {
             copy[i] = s[first_pointer];
@@ -67,6 +63,7 @@ public class Deque<Item> implements Iterable<Item> {
         }
         reset_first_pointer();
         reset_last_pointer();
+        last_index = n_array - 1;
         s = copy;
     }
 
@@ -75,7 +72,6 @@ public class Deque<Item> implements Iterable<Item> {
         if (n_array == 1) return;
         else {
             n_array = n_array / 2;
-            last_index = n_array - 1;
             Item[] copy = (Item[]) new Object[n_array];
             for (int i = 0; i < n_item; i = i + 1) {
                 copy[i] = s[first_pointer];
@@ -83,13 +79,14 @@ public class Deque<Item> implements Iterable<Item> {
             }
             reset_first_pointer();
             reset_last_pointer();
+            last_index = n_array - 1;
             s = copy;
         }
     }
 
     private class ArrayIterator implements Iterator<Item> {
         public boolean hasNext() {
-            return isEmpty();
+            return !isEmpty();
         }
 
         public void remove() {
@@ -97,8 +94,8 @@ public class Deque<Item> implements Iterable<Item> {
         }
 
         public Item next() {
-            if (!hasNext()){
-                throw new NoSuchElementException();
+            if (!hasNext()) {
+                throw new java.util.NoSuchElementException();
             } else {
                 return removeFirst();
             }
@@ -119,7 +116,7 @@ public class Deque<Item> implements Iterable<Item> {
 
     public void addFirst(Item item) {
         if (item == null) {
-            throw new IllegalArgumentException();
+            throw new java.lang.IllegalArgumentException();
         }
         if (n_item == n_array) {
             upsize_array();
@@ -130,6 +127,9 @@ public class Deque<Item> implements Iterable<Item> {
     }          // add the item to the front
 
     public void addLast(Item item) {
+        if (item == null) {
+            throw new java.lang.IllegalArgumentException();
+        }
         if (n_item == n_array) {
             upsize_array();
         }
@@ -141,9 +141,10 @@ public class Deque<Item> implements Iterable<Item> {
     public Item removeFirst() {
         Item value;
         if (isEmpty()) {
-            throw new NoSuchElementException();
+            throw new java.util.NoSuchElementException();
         }
         value = s[first_pointer];
+        s[first_pointer] = null;
         inc_first_pointer();
         n_item = n_item - 1;
         if (n_item == n_array / 4) {
@@ -155,9 +156,10 @@ public class Deque<Item> implements Iterable<Item> {
     public Item removeLast() {
         Item value;
         if (isEmpty()) {
-            throw new NoSuchElementException();
+            throw new java.util.NoSuchElementException();
         }
         value = s[last_pointer];
+        s[last_pointer] = null;
         dec_last_pointer();
         n_item = n_item - 1;
         if (n_item == n_array / 4) {
@@ -171,6 +173,14 @@ public class Deque<Item> implements Iterable<Item> {
     }        // return an iterator over items in order from front to end
 
     public static void main(String[] args) {
-        return;
+        Deque<Integer> deque = new Deque<Integer>();
+        deque.addFirst(3);
+        deque.addLast(4);
+        deque.addFirst(2);
+        deque.addFirst(1);
+        deque.addLast(5);
+        //       System.out.println(deque.removeFirst());
+        //       System.out.println(deque.removeLast());
+        //       System.out.println(deque.removeFirst());
     }   // unit testing (optional)
 }
