@@ -1,5 +1,7 @@
 import java.util.Iterator;
 import java.util.NoSuchElementException;
+import java.lang.Object;
+import java.lang.IllegalArgumentException;
 
 public class Deque<Item> implements Iterable<Item> {
     private Item[] s;
@@ -22,7 +24,7 @@ public class Deque<Item> implements Iterable<Item> {
         if (last_pointer == last_index) {
             last_pointer = first_index;
         } else {
-            first_pointer = first_pointer + 1;
+            last_pointer = last_pointer + 1;
         }
     }
 
@@ -95,7 +97,11 @@ public class Deque<Item> implements Iterable<Item> {
         }
 
         public Item next() {
-            return removeFirst();
+            if (!hasNext()){
+                throw new NoSuchElementException();
+            } else {
+                return removeFirst();
+            }
         }
     }
 
@@ -104,14 +110,17 @@ public class Deque<Item> implements Iterable<Item> {
     }                           // construct an empty deque
 
     public boolean isEmpty() {
-        return n_array == 0;
+        return n_item == 0;
     }                 // is the deque empty?
 
     public int size() {
-        return n_array;
+        return n_item;
     }                        // return the number of items on the deque
 
     public void addFirst(Item item) {
+        if (item == null) {
+            throw new IllegalArgumentException();
+        }
         if (n_item == n_array) {
             upsize_array();
         }
