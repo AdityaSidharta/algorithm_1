@@ -16,6 +16,20 @@ public class Point implements Comparable<Point> {
     private final int x;     // x-coordinate of this point
     private final int y;     // y-coordinate of this point
 
+    private class slopeComparator implements Comparator<Point> {
+        public int compare(Point p1, Point p2) {
+            double p1s = slopeTo(p1);
+            double p2s = slopeTo(p2);
+            if (p1s == p2s) {
+                return 0;
+            } else if (p1s > p2s) {
+                return 1;
+            } else {
+                return -1;
+            }
+        }
+    }
+
     /**
      * Initializes a new point.
      *
@@ -105,9 +119,7 @@ public class Point implements Comparable<Point> {
      * @return the Comparator that defines this ordering on points
      */
     public Comparator<Point> slopeOrder() {
-        public int compare(Point p1, Point p2) {
-            
-        }
+        return new slopeComparator();
     }
 
 
